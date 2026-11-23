@@ -1,0 +1,797 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.5 \u2014 REST API and Dashboard Evaluation",
+    "timestamp": "2026-11-22T15:14:15.811414+00:00",
+    "target_system": "Urban Microclimate & Heat-Risk Intelligence System",
+    "framework": "Flask 3.1.0 / Python 3.14 (Mocked Test Client)"
+  },
+  "endpoint_inventory": [
+    {
+      "rule": "/api/v1/alerts",
+      "endpoint": "api.list_alerts",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/alerts/<path:alert_id>/acknowledge",
+      "endpoint": "api.acknowledge_alert",
+      "methods": [
+        "POST"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/analytics/air-quality",
+      "endpoint": "api.get_air_quality_analytics",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/analytics/station-comparison",
+      "endpoint": "api.get_station_comparison",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/analytics/temperature",
+      "endpoint": "api.get_temperature_analytics",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/health",
+      "endpoint": "api.health_check",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/simulator/control",
+      "endpoint": "api.control_simulator",
+      "methods": [
+        "POST"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/simulator/status",
+      "endpoint": "api.get_simulator_status",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/stations",
+      "endpoint": "api.list_stations",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/stations/<station_id>",
+      "endpoint": "api.get_station",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/telemetry/<station_id>",
+      "endpoint": "api.get_station_telemetry",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/api/v1/telemetry/latest",
+      "endpoint": "api.get_latest_telemetry",
+      "methods": [
+        "GET"
+      ],
+      "category": "API_V1"
+    },
+    {
+      "rule": "/",
+      "endpoint": "index",
+      "methods": [
+        "GET"
+      ],
+      "category": "APP_ROUTE"
+    },
+    {
+      "rule": "/dashboard",
+      "endpoint": "dashboard",
+      "methods": [
+        "GET"
+      ],
+      "category": "APP_ROUTE"
+    }
+  ],
+  "functional_evaluation": [
+    {
+      "name": "Root Route HTML",
+      "endpoint": "/",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Root Route JSON Metadata",
+      "endpoint": "/",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Dashboard Route",
+      "endpoint": "/dashboard",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Health Endpoint (Operational)",
+      "endpoint": "/api/v1/health",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Health Endpoint (HBase Degraded)",
+      "endpoint": "/api/v1/health",
+      "method": "GET",
+      "expected_status": 503,
+      "actual_status": 503,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "List Stations",
+      "endpoint": "/api/v1/stations",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Get Station by ID",
+      "endpoint": "/api/v1/stations/ST001",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Get Latest Telemetry",
+      "endpoint": "/api/v1/telemetry/latest?limit=10",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Get Station Historical Telemetry",
+      "endpoint": "/api/v1/telemetry/ST001?limit=10",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "List Alerts",
+      "endpoint": "/api/v1/alerts?limit=10",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Acknowledge Alert",
+      "endpoint": "/api/v1/alerts/ST001%238205058153242%23HIGH_TEMPERATURE/acknowledge",
+      "method": "POST",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Temperature Analytics",
+      "endpoint": "/api/v1/analytics/temperature?days=1",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Air Quality Analytics",
+      "endpoint": "/api/v1/analytics/air-quality?days=1",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Station Comparison",
+      "endpoint": "/api/v1/analytics/station-comparison",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Simulator Status",
+      "endpoint": "/api/v1/simulator/status",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Simulator Control (Start)",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "POST",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    }
+  ],
+  "input_validation_and_errors": [
+    {
+      "name": "Unknown Station in /stations/<id>",
+      "endpoint": "/api/v1/stations/ST999",
+      "method": "GET",
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "details": {
+        "expected_code": "STATION_NOT_FOUND",
+        "actual_code": "STATION_NOT_FOUND",
+        "message": "Unknown station_id 'ST999'. Allowed: ['ST001', 'ST002', 'ST003', 'ST004', 'ST005']"
+      }
+    },
+    {
+      "name": "Invalid Station in /telemetry/latest",
+      "endpoint": "/api/v1/telemetry/latest?station_id=INVALID",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "Invalid station_id 'INVALID'. Allowed: ['ST001', 'ST002', 'ST003', 'ST004', 'ST005']"
+      }
+    },
+    {
+      "name": "Invalid Limit (< 1) in /telemetry/latest",
+      "endpoint": "/api/v1/telemetry/latest?limit=0",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_LIMIT",
+        "actual_code": "INVALID_LIMIT",
+        "message": "limit must be an integer between 1 and 500"
+      }
+    },
+    {
+      "name": "Invalid Limit (> 500) in /telemetry/latest",
+      "endpoint": "/api/v1/telemetry/latest?limit=9999",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_LIMIT",
+        "actual_code": "INVALID_LIMIT",
+        "message": "limit must be an integer between 1 and 500"
+      }
+    },
+    {
+      "name": "Non-Integer Limit in /telemetry/latest",
+      "endpoint": "/api/v1/telemetry/latest?limit=abc",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_LIMIT",
+        "actual_code": "INVALID_LIMIT",
+        "message": "limit must be a valid integer"
+      }
+    },
+    {
+      "name": "Unknown Station in /telemetry/<id>",
+      "endpoint": "/api/v1/telemetry/ST999",
+      "method": "GET",
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "details": {
+        "expected_code": "STATION_NOT_FOUND",
+        "actual_code": "STATION_NOT_FOUND",
+        "message": "Invalid station_id 'ST999'. Allowed: ['ST001', 'ST002', 'ST003', 'ST004', 'ST005']"
+      }
+    },
+    {
+      "name": "Invalid Order in /telemetry/<id>",
+      "endpoint": "/api/v1/telemetry/ST001?order=diagonal",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_ORDER",
+        "actual_code": "INVALID_ORDER",
+        "message": "order must be either 'asc' or 'desc'"
+      }
+    },
+    {
+      "name": "Invalid Measurement in /telemetry/<id>",
+      "endpoint": "/api/v1/telemetry/ST001?measurement=radiation",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_MEASUREMENT",
+        "actual_code": "INVALID_MEASUREMENT",
+        "message": "Invalid measurement 'radiation'. Allowed: ['atmospheric_pressure_hpa', 'heat_index', 'heat_index_celsius', 'humidity', 'humidity_percent', 'pm10', 'pm25', 'pressure', 'temperature', 'temperature_celsius']"
+      }
+    },
+    {
+      "name": "Start after End in /telemetry/<id>",
+      "endpoint": "/api/v1/telemetry/ST001?start=2026-11-20T00:00:00Z&end=2026-11-10T00:00:00Z",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETERS",
+        "actual_code": "INVALID_PARAMETERS",
+        "message": "start timestamp (2026-11-20T00:00:00+00:00) must be before end timestamp (2026-11-10T00:00:00+00:00)"
+      }
+    },
+    {
+      "name": "Invalid Limit in /telemetry/<id>",
+      "endpoint": "/api/v1/telemetry/ST001?limit=5000",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_LIMIT",
+        "actual_code": "INVALID_LIMIT",
+        "message": "limit must be an integer between 1 and 1000"
+      }
+    },
+    {
+      "name": "Invalid Station in /alerts",
+      "endpoint": "/api/v1/alerts?station_id=ST888",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "Invalid station_id 'ST888'. Allowed: ['ST001', 'ST002', 'ST003', 'ST004', 'ST005']"
+      }
+    },
+    {
+      "name": "Invalid Limit in /alerts",
+      "endpoint": "/api/v1/alerts?limit=-5",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_LIMIT",
+        "actual_code": "INVALID_LIMIT",
+        "message": "limit must be an integer between 1 and 500"
+      }
+    },
+    {
+      "name": "Alert Not Found in /alerts/<id>/acknowledge",
+      "endpoint": "/api/v1/alerts/NONEXISTENT%23KEY%23ALERT/acknowledge",
+      "method": "POST",
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "details": {
+        "expected_code": "ALERT_NOT_FOUND",
+        "actual_code": "ALERT_NOT_FOUND",
+        "message": "Alert with id 'NONEXISTENT#KEY#ALERT' not found or could not be acknowledged"
+      }
+    },
+    {
+      "name": "Unencoded Hash in Alert URL (Fragment Truncation)",
+      "endpoint": "/api/v1/alerts/NONEXISTENT#KEY/acknowledge",
+      "method": "POST",
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "details": {
+        "expected_code": "NOT_FOUND",
+        "actual_code": "NOT_FOUND",
+        "message": "The requested URL or resource was not found on this server."
+      }
+    },
+    {
+      "name": "Invalid Station in /analytics/temperature",
+      "endpoint": "/api/v1/analytics/temperature?station_id=BAD",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "Invalid station_id 'BAD'"
+      }
+    },
+    {
+      "name": "Invalid Days (< 1) in /analytics/temperature",
+      "endpoint": "/api/v1/analytics/temperature?days=0",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "days must be between 1 and 30"
+      }
+    },
+    {
+      "name": "Invalid Days (> 30) in /analytics/temperature",
+      "endpoint": "/api/v1/analytics/temperature?days=35",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "days must be between 1 and 30"
+      }
+    },
+    {
+      "name": "Non-Integer Days in /analytics/temperature",
+      "endpoint": "/api/v1/analytics/temperature?days=two",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "days must be a valid integer"
+      }
+    },
+    {
+      "name": "Invalid Station in /analytics/air-quality",
+      "endpoint": "/api/v1/analytics/air-quality?station_id=BAD",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "Invalid station_id 'BAD'"
+      }
+    },
+    {
+      "name": "Invalid Days in /analytics/air-quality",
+      "endpoint": "/api/v1/analytics/air-quality?days=-1",
+      "method": "GET",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_PARAMETER",
+        "actual_code": "INVALID_PARAMETER",
+        "message": "days must be between 1 and 30"
+      }
+    },
+    {
+      "name": "Missing Body in /simulator/control",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "POST",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "MISSING_ACTION",
+        "actual_code": "MISSING_ACTION",
+        "message": "Missing required 'action' in JSON body"
+      }
+    },
+    {
+      "name": "Missing Action in /simulator/control",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "POST",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "MISSING_ACTION",
+        "actual_code": "MISSING_ACTION",
+        "message": "Missing required 'action' in JSON body"
+      }
+    },
+    {
+      "name": "Invalid Action in /simulator/control",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "POST",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "INVALID_ACTION",
+        "actual_code": "INVALID_ACTION",
+        "message": "Invalid action 'destroy'. Supported actions: 'start', 'stop', 'inject_anomaly'"
+      }
+    },
+    {
+      "name": "Missing Params for inject_anomaly",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "POST",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "details": {
+        "expected_code": "MISSING_PARAMETERS",
+        "actual_code": "MISSING_PARAMETERS",
+        "message": "station_id and anomaly_type are required for inject_anomaly"
+      }
+    },
+    {
+      "name": "Unsupported Method (POST on /telemetry/latest)",
+      "endpoint": "/api/v1/telemetry/latest",
+      "method": "POST",
+      "expected_status": 405,
+      "actual_status": 405,
+      "passed": true,
+      "details": {
+        "expected_code": "METHOD_NOT_ALLOWED",
+        "actual_code": "METHOD_NOT_ALLOWED",
+        "message": "The HTTP method is not allowed for the requested URL."
+      }
+    },
+    {
+      "name": "Unsupported Method (GET on /simulator/control)",
+      "endpoint": "/api/v1/simulator/control",
+      "method": "GET",
+      "expected_status": 405,
+      "actual_status": 405,
+      "passed": true,
+      "details": {
+        "expected_code": "METHOD_NOT_ALLOWED",
+        "actual_code": "METHOD_NOT_ALLOWED",
+        "message": "The HTTP method is not allowed for the requested URL."
+      }
+    },
+    {
+      "name": "Nonexistent Route",
+      "endpoint": "/api/v1/not_a_real_route",
+      "method": "GET",
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "details": {
+        "expected_code": "NOT_FOUND",
+        "actual_code": "NOT_FOUND",
+        "message": "The requested URL or resource was not found on this server."
+      }
+    }
+  ],
+  "security_and_exception_handling": [
+    {
+      "name": "Stations Route Exception",
+      "endpoint": "/api/v1/stations",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "[WinError 10061] No connection could be made because the target machine actively refused it http://localhost:8085",
+        "response_message": "Failed to retrieve stations: [WinError 10061] No connection could be made because the target machine actively refused it http://localhost:8085",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    },
+    {
+      "name": "Station ID Route Exception",
+      "endpoint": "/api/v1/stations/ST001",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "Internal socket timeout connecting to 127.0.0.1:8085/microclimate:station_status",
+        "response_message": "Error fetching station details: Internal socket timeout connecting to 127.0.0.1:8085/microclimate:station_status",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    },
+    {
+      "name": "Latest Telemetry Exception",
+      "endpoint": "/api/v1/telemetry/latest",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "ConnectionRefusedError: Connection refused at /usr/local/hbase/rest",
+        "response_message": "Failed to fetch latest telemetry: ConnectionRefusedError: Connection refused at /usr/local/hbase/rest",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    },
+    {
+      "name": "Historical Telemetry Exception",
+      "endpoint": "/api/v1/telemetry/ST001",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "HBase REST Gateway timeout after 10000ms: http://localhost:8085/microclimate:readings",
+        "response_message": "Failed to retrieve telemetry: HBase REST Gateway timeout after 10000ms: http://localhost:8085/microclimate:readings",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    },
+    {
+      "name": "Alerts Route Exception",
+      "endpoint": "/api/v1/alerts",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "Database query failed: table microclimate:alerts is offline",
+        "response_message": "Failed to fetch alerts: Database query failed: table microclimate:alerts is offline",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    },
+    {
+      "name": "Analytics Route Exception",
+      "endpoint": "/api/v1/analytics/temperature",
+      "method": "GET",
+      "expected_status": 500,
+      "actual_status": 500,
+      "passed": true,
+      "details": {
+        "injected_exception": "ZeroDivisionError: division by zero in aggregation loop",
+        "response_message": "Analytics calculation failed: ZeroDivisionError: division by zero in aggregation loop",
+        "error_code": "INTERNAL_ERROR",
+        "discloses_internal_exception": true
+      }
+    }
+  ],
+  "data_consistency_evaluation": [
+    {
+      "name": "Historical Multi-Date Ordering (DESC)",
+      "endpoint": "/api/v1/telemetry/ST001",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Historical Multi-Date Ordering (ASC)",
+      "endpoint": "/api/v1/telemetry/ST001",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Measurement Field Projection",
+      "endpoint": "/api/v1/telemetry/ST001?measurement=temperature_celsius",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Provenance Formatting (VALID vs LEGACY_UNVERIFIED)",
+      "endpoint": "/api/v1/alerts",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Station Comparison Explicit None vs 0.0 Handling",
+      "endpoint": "/api/v1/analytics/station-comparison",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Empty Telemetry Database Response",
+      "endpoint": "/api/v1/telemetry/latest",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "Empty Alerts Database Response",
+      "endpoint": "/api/v1/alerts",
+      "method": "GET",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_tests": 56,
+    "passed_tests": 56,
+    "failed_tests": 0,
+    "success_rate_percent": 100.0,
+    "breakdown": {
+      "functional_endpoints": {
+        "total": 16,
+        "passed": 16
+      },
+      "input_validation_and_errors": {
+        "total": 27,
+        "passed": 27
+      },
+      "security_and_exception_handling": {
+        "total": 6,
+        "passed": 6,
+        "rf07_disclosed_count": 6
+      },
+      "data_consistency": {
+        "total": 7,
+        "passed": 7
+      }
+    }
+  }
+}

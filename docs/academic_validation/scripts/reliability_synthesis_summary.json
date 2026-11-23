@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.3.3",
+    "document": "docs/academic_validation/PHASE_8_4_3_3_RELIABILITY_SYNTHESIS.md",
+    "timestamp": "2026-11-22T14:56:00Z",
+    "project": "Urban Microclimate & Heat-Risk Intelligence System using Apache HBase",
+    "evaluation_type": "Reliability & Fault-Handling Synthesis"
+  },
+  "consolidated_findings": [
+    {
+      "finding_id": "RF-01",
+      "finding_title": "Silent Masking of Station-Status Persistence Failures",
+      "component": "IngestionService._process_single_reading (line 164)",
+      "classification": "CONFIRMED DEFECT",
+      "reproduced": true,
+      "evidence": "IngestionService invokes put_row(TABLE_STATION_STATUS) but discards its boolean return value. Even when status persistence fails, total_failed is NOT incremented, and total_ingested increments, misreporting complete success.",
+      "remediation_priority": "Critical",
+      "recommended_action": "Capture return value of put_row; increment failure counters and log warning on status failure."
+    },
+    {
+      "finding_id": "RF-02",
+      "finding_title": "IEEE 754 NaN Bypasses Unphysical Sanity Checks",
+      "component": "AnomalyDetector._is_reading_unphysical (lines 195-210)",
+      "classification": "CONFIRMED DEFECT",
+      "reproduced": true,
+      "evidence": "In Python IEEE 754 math, relational comparisons against float('nan') evaluate to False (nan < -10.0 is False; nan > 65.0 is False). As a result, _is_reading_unphysical() returns False, AnomalyDetector generates no alerts, and 'nan' is persisted to HBase.",
+      "remediation_priority": "Critical",
+      "recommended_action": "Add explicit math.isnan() / not math.isfinite() guard before numerical boundary evaluation."
+    },
+    {
+      "finding_id": "RF-03",
+      "finding_title": "Sequential Multi-Table Writes are Non-Atomic",
+      "component": "HBase Client / Ingestion Architecture",
+      "classification": "DESIGN LIMITATION",
+      "reproduced": true,
+      "evidence": "Apache HBase REST and native HBase architectures do not provide cross-table ACID transactions. Writes across readings, station_status, and alerts are sequential HTTP calls. Secondary failures leave partial writes committed.",
+      "remediation_priority": "Architectural",
+      "recommended_action": "Document multi-table atomicity boundary; evaluate compensating retries or transactional saga if required."
+    },
+    {
+      "finding_id": "RF-04",
+      "finding_title": "Absence of Dead-Letter Queue (DLQ) / Drop-on-Failure",
+      "component": "Ingestion Buffer Architecture",
+      "classification": "DESIGN LIMITATION",
+      "reproduced": true,
+      "evidence": "The prototype was specified with an in-memory queue.Queue(maxsize=1000). Dropping on failure during persistent outages is a documented scope boundary of the prototype, not a software bug.",
+      "remediation_priority": "Architectural",
+      "recommended_action": "Maintain as design limitation for academic baseline; implement disk-backed spillover queue for production."
+    },
+    {
+      "finding_id": "RF-05",
+      "finding_title": "Persistence of Flagged Raw Telemetry (Unphysical / Anomalous)",
+      "component": "Ingestion & Anomaly Detection Pipeline",
+      "classification": "INTENTIONAL BEHAVIOUR",
+      "reproduced": true,
+      "evidence": "Preserving raw sensor values in microclimate:readings while emitting anomaly alerts in microclimate:alerts is deliberate meteorological auditing practice, preventing silent data deletion.",
+      "remediation_priority": "None (Preserve)",
+      "recommended_action": "Preserve current behavior; ensure downstream analytics filter unphysical readings based on alert tags."
+    },
+    {
+      "finding_id": "RF-06",
+      "finding_title": "Missing Station Whitelist in Ingestion Engine",
+      "component": "IngestionService._process_single_reading (line 118)",
+      "classification": "VALIDATION GAP",
+      "reproduced": true,
+      "evidence": "While API endpoints strictly enforce VALID_STATION_IDS (HTTP 400/404), IngestionService accepts arbitrary station strings (e.g. ST999), generating HBase keys and persisting unmanaged prefixes.",
+      "remediation_priority": "Medium",
+      "recommended_action": "Add station whitelist check in IngestionService if dynamic station onboarding is not intended."
+    },
+    {
+      "finding_id": "RF-07",
+      "finding_title": "Internal Exception String Disclosure on HTTP 500 Responses",
+      "component": "Flask API Route Handlers (api.py: lines 80, 106, 145, 203, 252)",
+      "classification": "SECURITY RISK",
+      "reproduced": true,
+      "evidence": "Route handlers format 500 error responses as f'Failed to ...: {str(e)}', leaking internal Windows socket error codes ([WinError 10061]), hostnames, and ports to external HTTP clients.",
+      "remediation_priority": "High",
+      "recommended_action": "Sanitize user-facing error messages while maintaining detailed internal trace logging."
+    },
+    {
+      "finding_id": "RF-08",
+      "finding_title": "HBase Client HTTP Session Retry Mechanism",
+      "component": "HBaseClient._create_session (lines 95-106)",
+      "classification": "VERIFIED DESIGN",
+      "reproduced": true,
+      "evidence": "The real urllib3 Retry layer executes up to 4 total attempts across HTTP 500, 502, 503, 504 and connection errors with 1.8s cumulative exponential backoff, adhering strictly to settings.py configuration.",
+      "remediation_priority": "None (Verified)",
+      "recommended_action": "None; verified operating as configured."
+    }
+  ],
+  "quantitative_baseline": {
+    "queue_capacity": 1000,
+    "tested_overflow_burst": 500,
+    "burst_rejected_count": 500,
+    "burst_accepted_count": 0,
+    "fifo_integrity_verified": true,
+    "configured_retry_attempts": 3,
+    "total_http_attempts_per_exhaustion": 4,
+    "measured_retry_backoff_schedule_seconds": [0.0, 0.6, 1.2],
+    "measured_total_exhaustion_time_seconds": 1.804,
+    "in_flight_recovery_elapsed_seconds": 0.603
+  }
+}

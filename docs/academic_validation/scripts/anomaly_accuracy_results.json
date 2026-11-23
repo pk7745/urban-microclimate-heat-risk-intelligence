@@ -1,0 +1,413 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.4",
+    "timestamp": "2026-11-22T15:03:39.638087+00:00",
+    "component": "AnomalyDetector & TelemetryService Alert Pipeline"
+  },
+  "individual_rules_evaluation": {
+    "total_rule_tests": 37,
+    "passed": 37,
+    "failed": 0,
+    "results": [
+      {
+        "test_id": "RULE_TEST_01",
+        "metric_evaluated": "temperature",
+        "description": "Temperature just below warning (34.9\u00b0C)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_02",
+        "metric_evaluated": "temperature",
+        "description": "Temperature exactly at warning (35.0\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:WARNING",
+        "actual_alert": "HIGH_TEMPERATURE:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_03",
+        "metric_evaluated": "temperature",
+        "description": "Temperature in warning zone (37.5\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:WARNING",
+        "actual_alert": "HIGH_TEMPERATURE:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_04",
+        "metric_evaluated": "temperature",
+        "description": "Temperature just below critical (39.9\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:WARNING",
+        "actual_alert": "HIGH_TEMPERATURE:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_05",
+        "metric_evaluated": "temperature",
+        "description": "Temperature exactly at critical (40.0\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "actual_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_06",
+        "metric_evaluated": "temperature",
+        "description": "Temperature well above critical (43.0\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "actual_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_07",
+        "metric_evaluated": "temperature",
+        "description": "Temperature at upper physical boundary (65.0\u00b0C)",
+        "expected_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "actual_alert": "HIGH_TEMPERATURE:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_08",
+        "metric_evaluated": "temperature",
+        "description": "Temperature above sanity envelope (65.1\u00b0C)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_09",
+        "metric_evaluated": "temperature",
+        "description": "Temperature at lower physical boundary (-10.0\u00b0C)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_10",
+        "metric_evaluated": "temperature",
+        "description": "Temperature below sanity envelope (-10.1\u00b0C)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_11",
+        "metric_evaluated": "temperature",
+        "description": "Missing temperature (None)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_12",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 just below warning (59.9 \u00b5g/m\u00b3)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_13",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 exactly at warning (60.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM25:WARNING",
+        "actual_alert": "ELEVATED_PM25:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_14",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 just below critical (119.9 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM25:WARNING",
+        "actual_alert": "ELEVATED_PM25:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_15",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 exactly at critical (120.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM25:CRITICAL",
+        "actual_alert": "ELEVATED_PM25:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_16",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 at upper physical boundary (1500.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM25:CRITICAL",
+        "actual_alert": "ELEVATED_PM25:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_17",
+        "metric_evaluated": "pm25",
+        "description": "PM2.5 above sanity envelope (1500.1 \u00b5g/m\u00b3)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_18",
+        "metric_evaluated": "pm25",
+        "description": "Negative PM2.5 (-0.1 \u00b5g/m\u00b3)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_19",
+        "metric_evaluated": "pm10",
+        "description": "PM10 just below warning (99.9 \u00b5g/m\u00b3)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_20",
+        "metric_evaluated": "pm10",
+        "description": "PM10 exactly at warning (100.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM10:WARNING",
+        "actual_alert": "ELEVATED_PM10:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_21",
+        "metric_evaluated": "pm10",
+        "description": "PM10 just below critical (199.9 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM10:WARNING",
+        "actual_alert": "ELEVATED_PM10:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_22",
+        "metric_evaluated": "pm10",
+        "description": "PM10 exactly at critical (200.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM10:CRITICAL",
+        "actual_alert": "ELEVATED_PM10:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_23",
+        "metric_evaluated": "pm10",
+        "description": "PM10 at upper physical boundary (2500.0 \u00b5g/m\u00b3)",
+        "expected_alert": "ELEVATED_PM10:CRITICAL",
+        "actual_alert": "ELEVATED_PM10:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_24",
+        "metric_evaluated": "pm10",
+        "description": "PM10 above sanity envelope (2500.1 \u00b5g/m\u00b3)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_25",
+        "metric_evaluated": "pm10",
+        "description": "Negative PM10 (-1.0 \u00b5g/m\u00b3)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_26",
+        "metric_evaluated": "humidity",
+        "description": "Humidity at upper boundary (100.0%)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_27",
+        "metric_evaluated": "humidity",
+        "description": "Humidity above physical boundary (100.1%)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_28",
+        "metric_evaluated": "humidity",
+        "description": "Humidity at lower boundary (0.0%)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_29",
+        "metric_evaluated": "humidity",
+        "description": "Negative humidity (-0.1%)",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_30",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index just below warning (37.9\u00b0C)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_31",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index exactly at warning (38.0\u00b0C)",
+        "expected_alert": "HIGH_HEAT_INDEX:WARNING",
+        "actual_alert": "HIGH_HEAT_INDEX:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_32",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index just below critical (43.9\u00b0C)",
+        "expected_alert": "HIGH_HEAT_INDEX:WARNING",
+        "actual_alert": "HIGH_HEAT_INDEX:WARNING",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_33",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index exactly at critical (44.0\u00b0C)",
+        "expected_alert": "HIGH_HEAT_INDEX:CRITICAL",
+        "actual_alert": "HIGH_HEAT_INDEX:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_34",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index 48.0\u00b0C but heat_index_is_valid=False (gated)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_35",
+        "metric_evaluated": "heat_index",
+        "description": "Heat index is None (suppressed/low-temp)",
+        "expected_alert": "None",
+        "actual_alert": "None",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_36",
+        "metric_evaluated": "sensor_status",
+        "description": "Sensor reported OFFLINE status",
+        "expected_alert": "SENSOR_OFFLINE:CRITICAL",
+        "actual_alert": "SENSOR_OFFLINE:CRITICAL",
+        "passed": true
+      },
+      {
+        "test_id": "RULE_TEST_37",
+        "metric_evaluated": "sensor_status",
+        "description": "Sensor reported ERROR status",
+        "expected_alert": "INVALID_READING:CRITICAL",
+        "actual_alert": "INVALID_READING:CRITICAL",
+        "passed": true
+      }
+    ]
+  },
+  "alert_lifecycle_evaluation": {
+    "cooldown_configured_seconds": 60.0,
+    "lifecycle_steps_evaluated": 8,
+    "all_steps_verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "description": "Initial Warning condition (36\u00b0C)",
+        "expected": "EMIT Warning",
+        "actual": "Emitted 1 alert(s)",
+        "verified": true
+      },
+      {
+        "step": 2,
+        "description": "Repeated Warning within cooldown (30s elapsed)",
+        "expected": "SUPPRESS (0 alerts)",
+        "actual": "Emitted 0 alert(s)",
+        "verified": true
+      },
+      {
+        "step": 3,
+        "description": "Severity Escalation to Critical (41\u00b0C) during cooldown",
+        "expected": "EMIT Critical immediately",
+        "actual": "Emitted CRITICAL",
+        "verified": true
+      },
+      {
+        "step": 4,
+        "description": "Repeated Critical within cooldown (10s after escalation)",
+        "expected": "SUPPRESS (0 alerts)",
+        "actual": "Emitted 0 alert(s)",
+        "verified": true
+      },
+      {
+        "step": 5,
+        "description": "Cooldown expired (65s after last alert) during ongoing Critical",
+        "expected": "RE-EMIT Critical reminder",
+        "actual": "Emitted 1 alert(s)",
+        "verified": true
+      },
+      {
+        "step": 6,
+        "description": "Metric recovers to normal (30\u00b0C)",
+        "expected": "CLEAR active condition from state dict",
+        "actual": "Active state key exists: False",
+        "verified": true
+      },
+      {
+        "step": 7,
+        "description": "Subsequent Warning after recovery",
+        "expected": "EMIT Warning immediately as fresh alert",
+        "actual": "Emitted 1 alert(s)",
+        "verified": true
+      },
+      {
+        "step": 8,
+        "description": "Simultaneous multiple metric violations (Temp, PM25, PM10, Heat Index)",
+        "expected": "['ELEVATED_PM10', 'ELEVATED_PM25', 'HIGH_HEAT_INDEX', 'HIGH_TEMPERATURE']",
+        "actual": "['ELEVATED_PM10', 'ELEVATED_PM25', 'HIGH_HEAT_INDEX', 'HIGH_TEMPERATURE']",
+        "verified": true
+      }
+    ]
+  },
+  "provenance_and_presentation_evaluation": {
+    "provenance_cases_evaluated": 3,
+    "all_cases_verified": true,
+    "cases": [
+      {
+        "case": "A_verified_provenance",
+        "description": "Alert with complete calculation metadata",
+        "applicability_output": {
+          "is_valid": true,
+          "status": "VALID",
+          "origin_temp_celsius": 38.0,
+          "origin_humidity_percent": 50.0,
+          "note": "Verified calculation with complete provenance."
+        },
+        "event_status": "HISTORICAL_UNACKNOWLEDGED",
+        "verified": true
+      },
+      {
+        "case": "B_legacy_unverified",
+        "description": "Legacy alert without calculation provenance",
+        "applicability_output": {
+          "is_valid": null,
+          "status": "LEGACY_UNVERIFIED",
+          "note": "Legacy alert record missing calculation provenance metadata; validity cannot be independently verified."
+        },
+        "event_status": "HISTORICAL_ACKNOWLEDGED",
+        "verified": true
+      },
+      {
+        "case": "C_direct_physical_metric",
+        "description": "Standard physical metric (HIGH_TEMPERATURE)",
+        "applicability_output": {
+          "is_valid": true,
+          "status": "VALIDATED_DOMAIN",
+          "note": "Direct physical sensor metric."
+        },
+        "verified": true
+      }
+    ]
+  }
+}

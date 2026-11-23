@@ -1,0 +1,553 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.3.2",
+    "timestamp": "2026-11-22T13:48:05.185852+00:00",
+    "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "win32"
+  },
+  "retry_mechanism_verification": {
+    "configured_policy": {
+      "total_retries": 3,
+      "backoff_factor": 0.3,
+      "status_forcelist": [
+        500,
+        502,
+        503,
+        504
+      ],
+      "raise_on_status": false,
+      "total_allowed_attempts": 4
+    },
+    "results": [
+      {
+        "test_id": "A_conn_failure",
+        "name": "Connection Failure",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.002,
+          0.601,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8068,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "B_timeout",
+        "name": "Request Timeout",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.001,
+          0.601,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.806,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "C_http_500",
+        "name": "HTTP 500 Internal Server Error",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.0,
+          0.601,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8042,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "D_http_502",
+        "name": "HTTP 502 Bad Gateway",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.002,
+          0.6,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8049,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "E_http_503",
+        "name": "HTTP 503 Service Unavailable",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.0,
+          0.6,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8035,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "F_http_504",
+        "name": "HTTP 504 Gateway Timeout",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.001,
+          0.601,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8046,
+        "final_put_row_result": false,
+        "policy_matched": true
+      },
+      {
+        "test_id": "G_recovery_after_2_fails",
+        "name": "Recovery on Attempt 3 after two 500 errors",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 3,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.001,
+          0.601
+        ],
+        "total_elapsed_seconds": 0.6034,
+        "final_put_row_result": true,
+        "policy_matched": true
+      },
+      {
+        "test_id": "H_exhaustion_500",
+        "name": "Failure Exhaustion after all retries",
+        "configured_retry_attempts": 3,
+        "actual_http_attempts": 4,
+        "retried": true,
+        "inter_attempt_delays_seconds": [
+          0.001,
+          0.601,
+          1.201
+        ],
+        "total_elapsed_seconds": 1.8069,
+        "final_put_row_result": false,
+        "policy_matched": true
+      }
+    ],
+    "summary": "Urllib3 Retry layer executes real HTTP retries across HTTP 500, 502, 503, 504 and connection errors up to 4 total attempts with exponential backoff. Read timeouts do not trigger automatic retries under default urllib3 behavior."
+  },
+  "multi_table_persistence_semantics": {
+    "test_cases": [
+      {
+        "case_id": "Case_1_all_succeed",
+        "name": "All Tables Succeed",
+        "operations_attempted": [
+          "microclimate:readings",
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "operations_succeeded": [
+          "microclimate:readings",
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "operations_failed": [],
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "delta_alerts_created": 1,
+        "partial_persistence_occurred": false,
+        "metrics_accurately_represent_outcome": true,
+        "defect_confirmed": false
+      },
+      {
+        "case_id": "Case_2_readings_fails",
+        "name": "Readings Table Fails (Step 1)",
+        "operations_attempted": [
+          "microclimate:readings"
+        ],
+        "operations_succeeded": [],
+        "operations_failed": [
+          "microclimate:readings"
+        ],
+        "delta_total_ingested": 0,
+        "delta_total_failed": 1,
+        "delta_alerts_created": 0,
+        "partial_persistence_occurred": false,
+        "metrics_accurately_represent_outcome": true,
+        "defect_confirmed": false
+      },
+      {
+        "case_id": "Case_3_status_fails",
+        "name": "Station Status Table Fails (Step 2)",
+        "operations_attempted": [
+          "microclimate:readings",
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "operations_succeeded": [
+          "microclimate:readings",
+          "microclimate:alerts"
+        ],
+        "operations_failed": [
+          "microclimate:station_status"
+        ],
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "delta_alerts_created": 1,
+        "partial_persistence_occurred": true,
+        "metrics_accurately_represent_outcome": false,
+        "defect_confirmed": true
+      },
+      {
+        "case_id": "Case_4_alerts_fails",
+        "name": "Alert Table Fails (Step 3)",
+        "operations_attempted": [
+          "microclimate:readings",
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "operations_succeeded": [
+          "microclimate:readings",
+          "microclimate:station_status"
+        ],
+        "operations_failed": [
+          "microclimate:alerts"
+        ],
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "delta_alerts_created": 0,
+        "partial_persistence_occurred": true,
+        "metrics_accurately_represent_outcome": false,
+        "defect_confirmed": true
+      },
+      {
+        "case_id": "Case_5_status_and_alerts_fail",
+        "name": "Both Status and Alerts Fail (Steps 2 & 3)",
+        "operations_attempted": [
+          "microclimate:readings",
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "operations_succeeded": [
+          "microclimate:readings"
+        ],
+        "operations_failed": [
+          "microclimate:station_status",
+          "microclimate:alerts"
+        ],
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "delta_alerts_created": 0,
+        "partial_persistence_occurred": true,
+        "metrics_accurately_represent_outcome": false,
+        "defect_confirmed": true
+      }
+    ],
+    "evaluation": "Confirmed implementation defect: IngestionService._process_single_reading line 164 discards the return value of put_row(TABLE_STATION_STATUS). Failures on secondary tables leave partial writes committed to HBase while reporting complete success."
+  },
+  "nan_and_infinity_handling": {
+    "results": [
+      {
+        "input_label": "NaN",
+        "raw_value": "nan",
+        "math_isfinite_reference": false,
+        "detected_as_unphysical": false,
+        "alerts_generated": [],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": NaN,
+          "status": "VALID",
+          "is_valid": true
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "nan",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "CONFIRMED_DEFECT"
+      },
+      {
+        "input_label": "Positive Infinity",
+        "raw_value": "inf",
+        "math_isfinite_reference": false,
+        "detected_as_unphysical": true,
+        "alerts_generated": [
+          "INVALID_READING"
+        ],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "UNPHYSICAL_TEMPERATURE",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "inf",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "INTENTIONAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Negative Infinity",
+        "raw_value": "-inf",
+        "math_isfinite_reference": false,
+        "detected_as_unphysical": true,
+        "alerts_generated": [
+          "INVALID_READING"
+        ],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "UNPHYSICAL_TEMPERATURE",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "-inf",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "INTENTIONAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Finite Baseline (28.5\u00b0C)",
+        "raw_value": "28.5",
+        "math_isfinite_reference": true,
+        "detected_as_unphysical": false,
+        "alerts_generated": [],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": 29.59,
+          "status": "VALID",
+          "is_valid": true
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "28.5",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "NORMAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Inside Lower Bound (-10.0\u00b0C)",
+        "raw_value": "-10.0",
+        "math_isfinite_reference": true,
+        "detected_as_unphysical": false,
+        "alerts_generated": [],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "-10.0",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "NORMAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Outside Lower Bound (-10.1\u00b0C)",
+        "raw_value": "-10.1",
+        "math_isfinite_reference": true,
+        "detected_as_unphysical": true,
+        "alerts_generated": [
+          "INVALID_READING"
+        ],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "-10.1",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "INTENTIONAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Inside Upper Bound (65.0\u00b0C)",
+        "raw_value": "65.0",
+        "math_isfinite_reference": true,
+        "detected_as_unphysical": false,
+        "alerts_generated": [
+          "HIGH_TEMPERATURE"
+        ],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "UNSUPPORTED_EXTRAPOLATION",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "65.0",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "NORMAL_BEHAVIOUR"
+      },
+      {
+        "input_label": "Outside Upper Bound (65.1\u00b0C)",
+        "raw_value": "65.1",
+        "math_isfinite_reference": true,
+        "detected_as_unphysical": true,
+        "alerts_generated": [
+          "INVALID_READING"
+        ],
+        "heat_index_calculation_result": {
+          "heat_index_celsius": null,
+          "status": "UNPHYSICAL_TEMPERATURE",
+          "is_valid": false
+        },
+        "persisted_to_hbase": true,
+        "persisted_temperature_column": "65.1",
+        "delta_total_ingested": 1,
+        "delta_total_failed": 0,
+        "finding_classification": "INTENTIONAL_BEHAVIOUR"
+      }
+    ],
+    "key_mechanisms": {
+      "nan_defect_root_cause": "In Python IEEE 754 math, all relational comparisons against float('nan') evaluate to False (nan < -10.0 is False; nan > 65.0 is False). Therefore _is_reading_unphysical() returns False.",
+      "nan_heat_index_propagation": "In assess_heat_index(), NaN comparisons bypass the guards (-50 <= nan <= 65 is False, nan < 20 is False), allowing calculate_heat_index to execute and return nan.",
+      "infinity_detection": "inf > 65.0 evaluates to True, and -inf < -10.0 evaluates to True; both are successfully flagged as INVALID_READING alerts but are persisted to HBase under the project's raw-data preservation policy."
+    }
+  },
+  "station_validation_verification": {
+    "configured_stations": [
+      "ST001",
+      "ST002",
+      "ST003",
+      "ST004",
+      "ST005"
+    ],
+    "api_enforced_whitelist": [
+      "ST001",
+      "ST002",
+      "ST003",
+      "ST004",
+      "ST005"
+    ],
+    "api_validation_results": {
+      "get_station_status_code": 404,
+      "get_station_error_code": "STATION_NOT_FOUND",
+      "get_telemetry_status_code": 404,
+      "get_telemetry_error_code": "STATION_NOT_FOUND",
+      "get_alerts_status_code": 400,
+      "get_alerts_error_code": "INVALID_PARAMETER"
+    },
+    "ingestion_validation_results": {
+      "submit_reading_accepted": true,
+      "generated_reading_key": "ST999#20261117#8205058799999",
+      "generated_status_key": "ST999",
+      "persisted_tables_and_keys": [
+        {
+          "table": "microclimate:readings",
+          "row_key": "ST999#20261117#8205058799999"
+        },
+        {
+          "table": "microclimate:station_status",
+          "row_key": "ST999"
+        }
+      ],
+      "ingestion_total_ingested": 1,
+      "ingestion_total_failed": 0
+    },
+    "classification": "VALIDATION_GAP",
+    "rationale": "The Flask REST API strictly enforces VALID_STATION_IDS (returning HTTP 400/404 for unknown stations). However, IngestionService has no whitelist check, permitting arbitrary station strings to generate HBase row keys and persist rows. Because no project requirement explicitly forbade dynamic station ingestion, this is classified as a VALIDATION GAP / ARCHITECTURAL INCONSISTENCY rather than a contractual defect."
+  },
+  "api_information_disclosure_verification": {
+    "results": [
+      {
+        "test_id": "SEC_1_connection_refused",
+        "name": "Socket Connection Refused",
+        "http_status_code": 500,
+        "error_code": "INTERNAL_ERROR",
+        "client_visible_error_message": "Failed to fetch latest telemetry: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it",
+        "injected_exception_string": "Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it",
+        "leaks_internal_exception_string": true,
+        "response_envelope_intact": true
+      },
+      {
+        "test_id": "SEC_2_request_timeout",
+        "name": "HTTP Gateway Timeout",
+        "http_status_code": 500,
+        "error_code": "INTERNAL_ERROR",
+        "client_visible_error_message": "Failed to fetch latest telemetry: HTTP connection to http://localhost:8085 timed out after 5.0 seconds",
+        "injected_exception_string": "HTTP connection to http://localhost:8085 timed out after 5.0 seconds",
+        "leaks_internal_exception_string": true,
+        "response_envelope_intact": true
+      },
+      {
+        "test_id": "SEC_3_generic_runtime",
+        "name": "Internal Server RuntimeError",
+        "http_status_code": 500,
+        "error_code": "INTERNAL_ERROR",
+        "client_visible_error_message": "Failed to fetch latest telemetry: HBase RegionServer 10.0.1.42 reported internal MemStore flush deadlock",
+        "injected_exception_string": "HBase RegionServer 10.0.1.42 reported internal MemStore flush deadlock",
+        "leaks_internal_exception_string": true,
+        "response_envelope_intact": true
+      }
+    ],
+    "classification": "VALIDATION_GAP / SECURITY RISK",
+    "findings": "While the JSON response format strictly adheres to the standardized error envelope, API route handlers across api.py embed raw Python exception text ({str(e)}) directly into client-visible error messages on HTTP 500 responses, disclosing internal OS error codes, hostnames, and stack details."
+  },
+  "reclassification_matrix": [
+    {
+      "finding_id": "RF-01",
+      "finding_title": "Silent Masking of Station-Status Persistence Failures",
+      "component": "IngestionService._process_single_reading",
+      "reclassification": "CONFIRMED DEFECT",
+      "evidence": "IngestionService line 164 invokes put_row(TABLE_STATION_STATUS) but discards its boolean return value. Even when status persistence fails, total_failed is NOT incremented, and total_ingested increments, misreporting complete success.",
+      "action_required": "Inspect put_row return value; increment total_failed and log warning on failure."
+    },
+    {
+      "finding_id": "RF-02",
+      "finding_title": "IEEE 754 NaN Bypasses Unphysical Sanity Checks",
+      "component": "AnomalyDetector._is_reading_unphysical",
+      "reclassification": "CONFIRMED DEFECT",
+      "evidence": "In Python IEEE 754 math, relational comparisons (nan < -10.0, nan > 65.0) all evaluate to False. _is_reading_unphysical() returns False, and NaN values are persisted as string 'nan' into HBase.",
+      "action_required": "Add math.isnan() / not math.isfinite() guard before relational comparisons."
+    },
+    {
+      "finding_id": "RF-03",
+      "finding_title": "Multi-Table Sequential Non-Atomicity Across HBase Tables",
+      "component": "HBase Client / Ingestion Architecture",
+      "reclassification": "DESIGN LIMITATION",
+      "evidence": "Apache HBase REST and native HBase architectures do not provide cross-table ACID transactions. Writes across readings, station_status, and alerts are sequential HTTP calls. Secondary failures leave partial writes committed.",
+      "action_required": "Document as an architectural trade-off of HBase; implement compensating retries or transactional saga if required."
+    },
+    {
+      "finding_id": "RF-04",
+      "finding_title": "Absence of Dead-Letter Queue (DLQ) / Drop-on-Failure",
+      "component": "IngestionService Buffer",
+      "reclassification": "DESIGN LIMITATION",
+      "evidence": "The prototype was specified with an in-memory queue.Queue. No DLQ or store-and-forward disk buffer was included in Phase 1-3 requirements. Data dropped during outages is not a software bug, but a prototype design limit.",
+      "action_required": "Maintain as design limitation for the academic baseline; recommend disk-backed queue for production."
+    },
+    {
+      "finding_id": "RF-05",
+      "finding_title": "Persistence of Flagged Raw Telemetry (Unphysical / Anomalous)",
+      "component": "IngestionService & AnomalyDetector",
+      "reclassification": "INTENTIONAL BEHAVIOUR",
+      "evidence": "The system architecture deliberately separates anomaly detection (which alerts on unphysical/extreme metrics) from data ingestion (which preserves raw telemetry for auditing). Raw sensor data is stored while alerts are flagged.",
+      "action_required": "Preserve current behavior; ensure downstream analytics filter unphysical readings based on alert tags."
+    },
+    {
+      "finding_id": "RF-06",
+      "finding_title": "Missing Station Whitelist in Ingestion Engine",
+      "component": "IngestionService",
+      "reclassification": "VALIDATION GAP",
+      "evidence": "The Flask API strictly validates station_id against VALID_STATION_IDS, but IngestionService accepts arbitrary station strings (e.g. ST999). Because no formal contract forbade dynamic station onboarding, it is a validation gap rather than a contractual bug.",
+      "action_required": "Add station whitelist validation in IngestionService if dynamic stations are not supported."
+    },
+    {
+      "finding_id": "RF-07",
+      "finding_title": "Internal Exception String Disclosure on HTTP 500 Responses",
+      "component": "Flask API Route Handlers (app/routes/api.py)",
+      "reclassification": "VALIDATION GAP / SECURITY RISK",
+      "evidence": "Route handlers format 500 error responses as f'Failed to ...: {str(e)}', leaking internal Windows socket error codes and hostnames to HTTP clients.",
+      "action_required": "Sanitize user-facing error messages while maintaining detailed internal trace logging."
+    },
+    {
+      "finding_id": "RF-08",
+      "finding_title": "HBase Client HTTP Session Retry Mechanism",
+      "component": "HBaseClient._create_session",
+      "reclassification": "INTENTIONAL BEHAVIOUR / VERIFIED DESIGN",
+      "evidence": "The real urllib3 Retry layer was verified to retry HTTP 500, 502, 503, 504 and connection errors up to 4 total attempts with exponential backoff, adhering strictly to settings.py configuration.",
+      "action_required": "None; verified operating as configured."
+    }
+  ]
+}

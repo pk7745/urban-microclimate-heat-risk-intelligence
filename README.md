@@ -23,6 +23,7 @@ An enterprise-grade Big Data IoT streaming and urban heat-stress intelligence pl
 10. [College Project Demonstration Script](#college-project-demonstration-script)
 11. [Troubleshooting & FAQ](#troubleshooting--faq)
 12. [Scientific Disclosures & Limitations](#scientific-disclosures--limitations)
+13. [Academic Evaluation & Research Documentation](#academic-evaluation--research-documentation)
 
 ---
 
@@ -332,3 +333,30 @@ Follow this step-by-step sequence during your project evaluation, technical viva
 2. **Representative Coordinates:** Geographic coordinates for `ST001`–`ST005` represent typical Bengaluru urban morphology zones for spatial demonstration purposes.
 3. **Indicative Particulate Categorization:** CPCB concentration breakpoints are applied to instantaneous simulated readings for situational awareness and do not constitute a statutory 24-hour composite CPCB NAQI score.
 4. **Standalone Local Deployment:** HBase runs in local standalone mode (`hbase.cluster.distributed=false`) on the local filesystem.
+
+---
+
+## Academic Evaluation & Research Documentation
+
+A comprehensive academic validation suite, empirical performance benchmarks, reliability failure analyses, mathematical accuracy proofs, and formal literature comparisons are published under [`docs/academic_validation/`](docs/academic_validation/README.md).
+
+### Key Academic Reports & Publications
+
+| Domain | Authoritative Report | Description |
+| :--- | :--- | :--- |
+| **Master Index** | [Academic Documentation Catalog](docs/academic_validation/README.md) | Central lecturer and evaluator roadmap mapping all 10 evaluation domains. |
+| **Final Technical Evaluation** | [Phase 8.4.6 Final Technical Report](docs/academic_validation/PHASE_8_4_6_FINAL_TECHNICAL_EVALUATION.md) | Consolidated, defensible academic synthesis reconciling all benchmarks and evaluations. |
+| **Literature Review** | [Phase 8.2 Literature Review](docs/academic_validation/PHASE_8_2_LITERATURE_REVIEW.md) | Critical analysis of 7 peer-reviewed empirical and review studies on Big Data IoT, urban heat islands, and biometeorology (plus foundational references). |
+| **Research Comparison** | [Phase 8.3 Research Comparison Matrix](docs/academic_validation/PHASE_8_3_RESEARCH_COMPARISON.md) | Structured benchmarking against published academic platforms (Eingrüber 2025, Lyu 2022, Feigel 2025, Lefevre 2024, Chakraborty 2022). |
+| **Evaluation Design** | [Phase 8.4.1 Evaluation Design](docs/academic_validation/PHASE_8_4_1_EVALUATION_DESIGN.md) | Experimental protocol, measurement boundaries, and non-destructive testing methodology. |
+| **Safe Performance Results** | [Phase 8.4.2 Performance Results](docs/academic_validation/PHASE_8_4_2_PERFORMANCE_RESULTS.md) | In-memory queue (217k rec/s) and mocked worker (31.7k rec/s) performance evaluation. |
+| **Reliability Synthesis** | [Phase 8.4.3.3 Reliability Synthesis](docs/academic_validation/PHASE_8_4_3_3_RELIABILITY_SYNTHESIS.md) | Formal synthesis of fault-handling, retry semantics, and defects RF-01 through RF-08. |
+| **Algorithm Accuracy** | [Phase 8.4.4 Heat-Index & Anomaly Accuracy](docs/academic_validation/PHASE_8_4_4_HEAT_INDEX_ANOMALY_ACCURACY.md) | First-principles NWS formula parity ($100.0\%$, max diff $0.004647^\circ\text{C}$) and boundary evaluation. |
+| **API & Dashboard Evaluation** | [Phase 8.4.5 API & Dashboard Evaluation](docs/academic_validation/PHASE_8_4_5_API_DASHBOARD_EVALUATION.md) | End-to-end integration audit, UI resilience, responsive layout verification, and RF-09 audit. |
+| **Audit Corrections** | [Academic Audit Corrections](docs/academic_validation/ACADEMIC_AUDIT_CORRECTIONS.md) | Chronological audit log and mathematical reconciliation of all evaluation claims. |
+| **Publication Audit** | [Phase 9 Publication Audit](docs/academic_validation/PHASE_9_DOCUMENTATION_PUBLICATION_AUDIT.md) | Baseline inspection, link validation, technical consistency audit, and publication scope. |
+
+### Academic Disclosures & Epistemic Boundaries
+- **Synthetic Data Generation:** All monitoring stations (`ST001`–`ST005`) are simulated autoregressive virtual sensors. No claim of physical hardware sensor calibration, field deployment, or official meteorological authority certification is made.
+- **Benchmark Boundaries:** Reported high-throughput figures ($217,829\ \text{rec/s}$ queue insertion, $31,765\ \text{rec/s}$ worker processing) evaluate in-memory CPU processing speed with mocked persistence and must not be cited as live Apache HBase cluster write throughput.
+- **Particulate Classification:** Instantaneous particulate classifications against CPCB concentration breakpoints provide indicative real-time operational context and do not constitute statutory 24-hour composite National Air Quality Index (NAQI) scores.

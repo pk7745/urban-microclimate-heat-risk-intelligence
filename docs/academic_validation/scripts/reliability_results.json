@@ -1,0 +1,420 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.3.1",
+    "timestamp": "2026-11-22T13:32:09.148573+00:00",
+    "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "win32"
+  },
+  "scenarios": {
+    "scenario_a": {
+      "scenario": "A. Queue Saturation",
+      "configured_capacity": 1000,
+      "initial_empty_verified": true,
+      "insertion_mode": "Non-blocking (queue.put(block=False))",
+      "fill_to_capacity": {
+        "attempted": 1000,
+        "accepted": 1000,
+        "queue_full_verified": true
+      },
+      "saturation_overflow": {
+        "attempted": 500,
+        "accepted": 0,
+        "rejected": 500,
+        "counter_dropped": 500,
+        "counter_total_received": 1000,
+        "queue_size_maintained": true
+      },
+      "recovery_and_fifo": {
+        "partial_drain_count": 200,
+        "queue_size_after_drain": 800,
+        "fifo_order_intact": true,
+        "refill_attempted": 100,
+        "refill_accepted": 100,
+        "queue_size_after_refill": 900
+      },
+      "final_accounting": {
+        "total_attempted": 1600,
+        "total_accepted": 1100,
+        "total_rejected": 500,
+        "total_consumed": 1100,
+        "final_remaining": 0,
+        "final_empty_verified": true,
+        "task_done_accounting_verified": true
+      },
+      "status": "VERIFIED"
+    },
+    "scenario_b": {
+      "scenario": "B. Invalid & Malformed Telemetry",
+      "total_test_cases": 12,
+      "results": [
+        {
+          "test_id": "B01_missing_station_id",
+          "description": "Missing station_id",
+          "expected": "KeyError in _process_single_reading",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": "KeyError: 'station_id'",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B02_missing_timestamp_ms",
+          "description": "Missing timestamp_ms",
+          "expected": "KeyError in _process_single_reading",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": "KeyError: 'timestamp_ms'",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B03_missing_non_critical_fields",
+          "description": "Missing humidity, pm25, pressure",
+          "expected": "Accepted; missing fields stored as None / empty string",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "PERSISTED_SILENTLY"
+        },
+        {
+          "test_id": "B04_unknown_station_id",
+          "description": "Unknown station_id ('ST999')",
+          "expected": "Accepted without validation against VALID_STATION_IDS whitelist",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "PERSISTED_SILENTLY"
+        },
+        {
+          "test_id": "B05_non_numeric_temperature",
+          "description": "String temperature value ('hot')",
+          "expected": "TypeError during unphysical evaluation in AnomalyDetector",
+          "detector_exception": "TypeError: '<' not supported between instances of 'str' and 'float'",
+          "alerts_generated": [],
+          "ingest_exception": "TypeError: '<' not supported between instances of 'str' and 'float'",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B06_non_numeric_humidity",
+          "description": "List humidity value ([55.0])",
+          "expected": "TypeError during unphysical evaluation in AnomalyDetector",
+          "detector_exception": "TypeError: '<' not supported between instances of 'list' and 'float'",
+          "alerts_generated": [],
+          "ingest_exception": "TypeError: '<' not supported between instances of 'list' and 'float'",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B07_nan_temperature",
+          "description": "NaN temperature value (float('nan'))",
+          "expected": "Passes unphysical check (nan comparisons false); written as 'nan' string",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "PERSISTED_SILENTLY"
+        },
+        {
+          "test_id": "B08_positive_inf_temperature",
+          "description": "Positive infinity temperature (float('inf'))",
+          "expected": "Flagged as INVALID_READING alert, but still written to HBase",
+          "detector_exception": null,
+          "alerts_generated": [
+            "INVALID_READING"
+          ],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "ALERTED_AND_PERSISTED"
+        },
+        {
+          "test_id": "B09_invalid_timestamp_str",
+          "description": "Timestamp_ms provided as date string ('2026-11-18')",
+          "expected": "TypeError in RowKeyBuilder.build_reading_key",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": "TypeError: unsupported operand type(s) for /: 'str' and 'float'",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B10_wild_negative_timestamp",
+          "description": "Negative out-of-range timestamp (-999999999999999)",
+          "expected": "ValueError / OSError in datetime.fromtimestamp",
+          "detector_exception": null,
+          "alerts_generated": [],
+          "ingest_exception": "OSError: [Errno 22] Invalid argument",
+          "tables_persisted": [],
+          "total_ingested_delta": 0,
+          "total_failed_delta": 0,
+          "outcome": "REJECTED_BY_EXCEPTION"
+        },
+        {
+          "test_id": "B11_high_unphysical_temperature",
+          "description": "Temperature above sanity envelope (70.0\u00b0C)",
+          "expected": "Generates INVALID_READING alert; persisted to readings, status, and alerts",
+          "detector_exception": null,
+          "alerts_generated": [
+            "INVALID_READING"
+          ],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "ALERTED_AND_PERSISTED"
+        },
+        {
+          "test_id": "B12_low_unphysical_temperature",
+          "description": "Temperature below sanity envelope (-20.0\u00b0C)",
+          "expected": "Generates INVALID_READING alert; persisted to readings, status, and alerts",
+          "detector_exception": null,
+          "alerts_generated": [
+            "INVALID_READING"
+          ],
+          "ingest_exception": null,
+          "tables_persisted": [
+            "microclimate:readings",
+            "microclimate:station_status"
+          ],
+          "total_ingested_delta": 1,
+          "total_failed_delta": 0,
+          "outcome": "ALERTED_AND_PERSISTED"
+        }
+      ],
+      "status": "VERIFIED"
+    },
+    "scenario_c": {
+      "scenario": "C. Persistence Failure & Multi-Table Semantics",
+      "total_sub_scenarios": 6,
+      "results": [
+        {
+          "test_id": "C1_connection_failure",
+          "name": "Connection Error on TABLE_READINGS",
+          "description": "HBase REST gateway network connection refused",
+          "unhandled_exception": "ConnectionError: Connection refused",
+          "tables_attempted": [
+            "microclimate:readings"
+          ],
+          "total_ingested": 0,
+          "total_failed": 1,
+          "alerts_created": 0,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        },
+        {
+          "test_id": "C2_generic_persistence_exception",
+          "name": "Unhandled RuntimeError on TABLE_READINGS",
+          "description": "Arbitrary unhandled runtime exception during put_row",
+          "unhandled_exception": "RuntimeError: Internal HBase storage error",
+          "tables_attempted": [
+            "microclimate:readings"
+          ],
+          "total_ingested": 0,
+          "total_failed": 1,
+          "alerts_created": 0,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        },
+        {
+          "test_id": "C3_request_timeout",
+          "name": "Read Timeout on TABLE_READINGS",
+          "description": "HTTP socket read timeout after 5.0s",
+          "unhandled_exception": "Timeout: Read timed out",
+          "tables_attempted": [
+            "microclimate:readings"
+          ],
+          "total_ingested": 0,
+          "total_failed": 1,
+          "alerts_created": 0,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        },
+        {
+          "test_id": "C4_readings_table_returns_false",
+          "name": "Put returns False on TABLE_READINGS (HTTP 500)",
+          "description": "Gateway returns HTTP 500 error on readings table write",
+          "unhandled_exception": null,
+          "tables_attempted": [
+            "microclimate:readings"
+          ],
+          "total_ingested": 0,
+          "total_failed": 1,
+          "alerts_created": 0,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        },
+        {
+          "test_id": "C5_status_table_failure_partial_write",
+          "name": "Failure on TABLE_STATION_STATUS after successful TABLE_READINGS",
+          "description": "Readings table succeeds; Station Status write fails (partial write)",
+          "unhandled_exception": null,
+          "tables_attempted": [
+            "microclimate:readings",
+            "microclimate:station_status",
+            "microclimate:alerts"
+          ],
+          "total_ingested": 1,
+          "total_failed": 0,
+          "alerts_created": 1,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        },
+        {
+          "test_id": "C6_alert_table_failure_partial_write",
+          "name": "Failure on TABLE_ALERTS after readings and status succeed",
+          "description": "Readings and status succeed; Alert write fails",
+          "unhandled_exception": null,
+          "tables_attempted": [
+            "microclimate:readings",
+            "microclimate:station_status",
+            "microclimate:alerts"
+          ],
+          "total_ingested": 1,
+          "total_failed": 0,
+          "alerts_created": 0,
+          "partial_multi_table_write_occurred": true,
+          "record_retried": false,
+          "record_dropped": true
+        }
+      ],
+      "key_findings": {
+        "retry_policy": "No retry queue or dead-letter queue (DLQ) implemented; failed records are permanently dropped",
+        "multi_table_atomicity": "HBase writes across readings, station_status, and alerts are non-atomic; partial writes occur if secondary tables fail",
+        "status_failure_masking": "In IngestionService, the return value of put_row on TABLE_STATION_STATUS is ignored; total_failed is NOT incremented when only status fails"
+      },
+      "status": "VERIFIED"
+    },
+    "scenario_d": {
+      "scenario": "D. Worker Exception Handling & Continuation",
+      "d1_single_failing_then_valid": {
+        "attempted": 2,
+        "processed_successfully": 1,
+        "failed": 1,
+        "exceptions_caught": [
+          "KeyError: 'station_id'"
+        ],
+        "worker_continued_after_failure": true,
+        "queue_empty": true
+      },
+      "d2_burst_with_middle_failure": {
+        "attempted": 10,
+        "processed_successfully": 9,
+        "failed": 1,
+        "queue_task_done_accounting_correct": true,
+        "worker_continued_processing": true
+      },
+      "determination": "Worker gracefully catches unhandled exceptions in _worker_loop, calls task_done(), and continues processing subsequent records without termination.",
+      "status": "VERIFIED"
+    },
+    "scenario_e": {
+      "scenario": "E. Transient Failure Recovery",
+      "phase1_outage": {
+        "attempted": 5,
+        "ingested": 0,
+        "failed": 5
+      },
+      "phase2_recovery": {
+        "attempted": 5,
+        "ingested": 5,
+        "failed": 0,
+        "cumulative_ingested": 5,
+        "cumulative_failed": 5,
+        "last_ingest_timestamp": "2026-11-22T13:32:09.154801+00:00"
+      },
+      "recovery_mechanism": "Automatic in-flight resumption: the worker continues consuming new records once the backend recovers, requiring no restart.",
+      "dropped_data_disposition": "Records submitted during the outage were dropped permanently; the system has no store-and-forward or replay mechanism.",
+      "status": "VERIFIED"
+    },
+    "scenario_f": {
+      "scenario": "F. Flask API Degraded-State",
+      "total_sub_tests": 5,
+      "results": [
+        {
+          "test_id": "F1_health_degraded",
+          "endpoint": "GET /api/v1/health",
+          "status_code": 503,
+          "expected_code": 503,
+          "status_field": "error",
+          "error_code": "SERVICE_UNAVAILABLE",
+          "is_standard_error_structure": true
+        },
+        {
+          "test_id": "F2_telemetry_connection_failure",
+          "endpoint": "GET /api/v1/telemetry/latest?limit=10",
+          "status_code": 500,
+          "expected_code": 500,
+          "status_field": "error",
+          "error_code": "INTERNAL_ERROR",
+          "error_message": "Failed to fetch latest telemetry: Failed to establish a new connection: [WinError 10061] No connection could be made",
+          "exposes_internal_exception_details": true
+        },
+        {
+          "test_id": "F3_unknown_station_404",
+          "endpoint": "GET /api/v1/stations/ST999",
+          "status_code": 404,
+          "expected_code": 404,
+          "error_code": "STATION_NOT_FOUND"
+        },
+        {
+          "test_id": "F4_malformed_parameters_400",
+          "bad_limit_status": 400,
+          "bad_limit_code": "INVALID_LIMIT",
+          "bad_order_status": 400,
+          "bad_order_code": "INVALID_ORDER"
+        },
+        {
+          "test_id": "F5_api_continues_responding",
+          "endpoint": "GET /",
+          "status_code": 200,
+          "continues_responding": true
+        }
+      ],
+      "key_findings": {
+        "error_envelope": "API consistently uses standardized JSON payload: {'status': 'error', 'error': {'code': ..., 'message': ...}}",
+        "exception_leakage": "Internal exception text ({str(e)}) is concatenated into error messages on HTTP 500 responses",
+        "stateless_resilience": "Flask WSGI app remains completely functional and responsive after handling internal errors"
+      },
+      "status": "VERIFIED"
+    }
+  }
+}

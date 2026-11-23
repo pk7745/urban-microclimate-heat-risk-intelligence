@@ -1,0 +1,350 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.5 \u2014 REST API and Dashboard Evaluation",
+    "component": "Interactive Command-Center Dashboard (HTML/JS/CSS)",
+    "timestamp": "2026-11-22T15:15:46.604372+00:00",
+    "target_system": "Urban Microclimate & Heat-Risk Intelligence System"
+  },
+  "dom_structure_and_sections": {
+    "sections": {
+      "section-overview": {
+        "label": "Overview",
+        "present": true
+      },
+      "section-live": {
+        "label": "Live Monitoring",
+        "present": true
+      },
+      "section-analytics": {
+        "label": "Historical Analytics",
+        "present": true
+      },
+      "section-air-quality": {
+        "label": "Air Quality",
+        "present": true
+      },
+      "section-heat-risk": {
+        "label": "Heat Risk",
+        "present": true
+      },
+      "section-alerts": {
+        "label": "Alerts & Events",
+        "present": true
+      },
+      "section-stations": {
+        "label": "Stations",
+        "present": true
+      },
+      "section-system": {
+        "label": "System Status",
+        "present": true
+      }
+    },
+    "canvases": {
+      "overview-trend-chart": true,
+      "live-metrics-chart": true,
+      "historical-trend-chart": true,
+      "air-quality-bar-chart": true,
+      "heat-risk-comparison-chart": true
+    },
+    "map_container": true,
+    "modals": {
+      "stationDetailModal": true,
+      "acknowledgeModal": true
+    },
+    "disclosures": {
+      "simulated_data_badge": true,
+      "simulated_stations_badge": true,
+      "cpcb_naqi_disclaimer": true,
+      "nws_methodology_disclosure": true
+    }
+  },
+  "data_binding_alignment": [
+    {
+      "field": "station_id",
+      "expected_modules": [
+        "app",
+        "alerts",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "alerts",
+        "map"
+      ],
+      "passed": true,
+      "description": "Station primary identifier"
+    },
+    {
+      "field": "station_name",
+      "expected_modules": [
+        "app",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "map"
+      ],
+      "passed": true,
+      "description": "Station human-readable display name"
+    },
+    {
+      "field": "zone",
+      "expected_modules": [
+        "app",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "map"
+      ],
+      "passed": true,
+      "description": "Urban morphology zone"
+    },
+    {
+      "field": "connectivity",
+      "expected_modules": [
+        "app",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "map"
+      ],
+      "passed": true,
+      "description": "Station live connectivity state"
+    },
+    {
+      "field": "temperature",
+      "expected_modules": [
+        "app",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "map"
+      ],
+      "passed": true,
+      "description": "Live ambient temperature field on station status"
+    },
+    {
+      "field": "temperature_celsius",
+      "expected_modules": [
+        "charts",
+        "app"
+      ],
+      "matched_modules": [
+        "charts",
+        "app"
+      ],
+      "passed": true,
+      "description": "Historical telemetry temperature reading"
+    },
+    {
+      "field": "humidity",
+      "expected_modules": [
+        "app",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "map"
+      ],
+      "passed": true,
+      "description": "Live humidity field on station status"
+    },
+    {
+      "field": "humidity_percent",
+      "expected_modules": [
+        "charts",
+        "app"
+      ],
+      "matched_modules": [
+        "charts",
+        "app"
+      ],
+      "passed": true,
+      "description": "Historical telemetry humidity reading"
+    },
+    {
+      "field": "heat_index",
+      "expected_modules": [
+        "app",
+        "charts",
+        "map"
+      ],
+      "matched_modules": [
+        "app",
+        "charts",
+        "map"
+      ],
+      "passed": true,
+      "description": "Apparent heat index on station status"
+    },
+    {
+      "field": "heat_index_celsius",
+      "expected_modules": [
+        "charts",
+        "app"
+      ],
+      "matched_modules": [
+        "charts",
+        "app"
+      ],
+      "passed": true,
+      "description": "Historical telemetry heat index reading"
+    },
+    {
+      "field": "pm25",
+      "expected_modules": [
+        "app",
+        "charts"
+      ],
+      "matched_modules": [
+        "app",
+        "charts"
+      ],
+      "passed": true,
+      "description": "Fine particulate matter PM2.5"
+    },
+    {
+      "field": "pm10",
+      "expected_modules": [
+        "app",
+        "charts"
+      ],
+      "matched_modules": [
+        "app",
+        "charts"
+      ],
+      "passed": true,
+      "description": "Coarse particulate matter PM10"
+    },
+    {
+      "field": "calculation_applicability",
+      "expected_modules": [
+        "alerts"
+      ],
+      "matched_modules": [
+        "alerts"
+      ],
+      "passed": true,
+      "description": "Provenance metadata block on alert rows"
+    },
+    {
+      "field": "LEGACY_UNVERIFIED",
+      "expected_modules": [
+        "alerts"
+      ],
+      "matched_modules": [
+        "alerts"
+      ],
+      "passed": true,
+      "description": "Classification tag for historical unannotated alerts"
+    },
+    {
+      "field": "SIMULATED DATA",
+      "expected_modules": [
+        "index_html"
+      ],
+      "matched_modules": [
+        "index_html"
+      ],
+      "passed": true,
+      "description": "Header badge disclosing SIMULATED data provenance"
+    },
+    {
+      "field": "SIMULATED STATIONS",
+      "expected_modules": [
+        "index_html"
+      ],
+      "matched_modules": [
+        "index_html"
+      ],
+      "passed": true,
+      "description": "Map card badge disclosing SIMULATED station grid"
+    }
+  ],
+  "visualization_correctness": {
+    "span_gaps_false_declarations": 5,
+    "units": {
+      "temperature": {
+        "unit": "\u00b0C",
+        "present": true
+      },
+      "humidity": {
+        "unit": "%",
+        "present": true
+      },
+      "heat_index": {
+        "unit": "\u00b0C",
+        "present": true
+      },
+      "pm25": {
+        "unit": "\u00b5g/m\u00b3",
+        "present": true
+      },
+      "pm10": {
+        "unit": "\u00b5g/m\u00b3",
+        "present": true
+      }
+    },
+    "station_coords_match": true
+  },
+  "error_resilience_and_polling": {
+    "polling_interval_ms": 10000,
+    "has_overlap_lock": true,
+    "network_error_handled": true,
+    "hbase_degraded_handled": true,
+    "alerts_error_handled": true
+  },
+  "responsive_layout_audit": {
+    "breakpoints": [
+      {
+        "breakpoint": "@media (max-width: 992px)",
+        "description": "Tablet breakpoint (collapsible drawer, toggle button, main margin 0)",
+        "present": true
+      },
+      {
+        "breakpoint": "@media (max-width: 768px)",
+        "description": "Mobile breakpoint (single-column cards, font downsizing, table scrolling)",
+        "present": true
+      },
+      {
+        "breakpoint": "@media (max-width: 576px)",
+        "description": "Small phone breakpoint (compact badges, stacked headers, overflow containment)",
+        "present": true
+      }
+    ],
+    "responsive_table_wrapper": true
+  },
+  "browser_qa_evidence_catalog": [
+    {
+      "filename": "dashboard_overview.png",
+      "path": "C:\\Users\\pky45\\.gemini\\antigravity\\scratch\\urban-microclimate-hbase\\docs\\screenshots\\dashboard_overview.png",
+      "exists": true,
+      "size_bytes": 23171,
+      "provenance": "Phase 4 / Phase 6 Verified Chromium Browser Artifact"
+    },
+    {
+      "filename": "heat_risk_intelligence.png",
+      "path": "C:\\Users\\pky45\\.gemini\\antigravity\\scratch\\urban-microclimate-hbase\\docs\\screenshots\\heat_risk_intelligence.png",
+      "exists": true,
+      "size_bytes": 70505,
+      "provenance": "Phase 4 / Phase 6 Verified Chromium Browser Artifact"
+    },
+    {
+      "filename": "station_infrastructure.png",
+      "path": "C:\\Users\\pky45\\.gemini\\antigravity\\scratch\\urban-microclimate-hbase\\docs\\screenshots\\station_infrastructure.png",
+      "exists": true,
+      "size_bytes": 94865,
+      "provenance": "Phase 4 / Phase 6 Verified Chromium Browser Artifact"
+    }
+  ],
+  "summary": {
+    "total_checks": 55,
+    "passed_checks": 55,
+    "success_rate_percent": 100.0,
+    "status": "VERIFIED DESIGN"
+  }
+}

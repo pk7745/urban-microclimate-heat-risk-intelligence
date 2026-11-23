@@ -1,0 +1,1021 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 8.4.4",
+    "reference_methodology": "NOAA / US National Weather Service (Steadman 1979; Rothfusz 1990)",
+    "tolerance_celsius": 0.05,
+    "tolerance_justification": "Half-step rounding window on 2 decimal places is 0.005\u00b0C; 0.05\u00b0C provides conservative academic threshold."
+  },
+  "test_statistics": {
+    "total_test_cases": 42,
+    "passed_cases": 40,
+    "failed_cases": 2,
+    "numerical_parity_cases_evaluated": 25,
+    "numerical_parity_success_rate": "100.0%"
+  },
+  "numerical_accuracy_metrics": {
+    "max_absolute_difference_celsius": 0.004646999999884827,
+    "max_difference_case_celsius": {
+      "input": "30.0\u00b0C, 90.0% RH",
+      "project_c": 40.77,
+      "ref_unrounded_c": 40.77464699999989,
+      "diff_c": 0.004646999999884827
+    },
+    "mean_absolute_difference_celsius": 0.0022122833973566,
+    "max_absolute_difference_fahrenheit": 0.00836459999980832,
+    "max_difference_case_fahrenheit": {
+      "input": "30.0\u00b0C, 90.0% RH",
+      "diff_f": 0.00836459999980832
+    },
+    "mean_absolute_difference_fahrenheit": 0.003982110115242676
+  },
+  "confirmed_defects": [
+    {
+      "finding_id": "RF-02",
+      "description": "IEEE 754 NaN inputs bypass validation guards, evaluating to status VALID and outputting NaN.",
+      "affected_inputs": [
+        "temp_celsius = NaN",
+        "relative_humidity = NaN"
+      ]
+    }
+  ],
+  "detailed_comparisons": [
+    {
+      "test_id": "HI_TEST_01",
+      "category": "1_below_rothfusz_threshold",
+      "description": "Cool mild (21\u00b0C / 50% RH)",
+      "inputs": {
+        "temperature_celsius": "21.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 20.73,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 20.730555555555554,
+        "rounded_celsius": 20.73,
+        "unrounded_fahrenheit": 69.315,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 0.000555555555553866,
+      "absolute_difference_f": 0.0010000000000047748,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000556\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_02",
+      "category": "1_below_rothfusz_threshold",
+      "description": "Comfortable room temp (23\u00b0C / 60% RH)",
+      "inputs": {
+        "temperature_celsius": "23.0",
+        "relative_humidity_percent": "60.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 22.96,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 22.96111111111112,
+        "rounded_celsius": 22.96,
+        "unrounded_fahrenheit": 73.33000000000001,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 0.0011111111111183902,
+      "absolute_difference_f": 0.0020000000000095497,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.001111\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_03",
+      "category": "1_below_rothfusz_threshold",
+      "description": "Warm dry (25\u00b0C / 40% RH)",
+      "inputs": {
+        "temperature_celsius": "25.0",
+        "relative_humidity_percent": "40.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 24.8,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 24.799999999999997,
+        "rounded_celsius": 24.8,
+        "unrounded_fahrenheit": 76.64,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 3.552713678800501e-15,
+      "absolute_difference_f": 0.0,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000000\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_04",
+      "category": "1_below_rothfusz_threshold",
+      "description": "78\u00b0F ambient, hi_avg = 77.925\u00b0F (< 80\u00b0F)",
+      "inputs": {
+        "temperature_celsius": "25.5556",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 25.51,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 25.513935555555555,
+        "rounded_celsius": 25.51,
+        "unrounded_fahrenheit": 77.925084,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 0.003935555555553805,
+      "absolute_difference_f": 0.007083999999991875,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.003936\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_05",
+      "category": "2_boundary_80f_activation",
+      "description": "Boundary hi_avg = 79.9\u00b0F (Steadman Preliminary)",
+      "inputs": {
+        "temperature_celsius": "22.3942",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 22.19,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 22.19446555555556,
+        "rounded_celsius": 22.19,
+        "unrounded_fahrenheit": 71.950038,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 0.004465555555558609,
+      "absolute_difference_f": 0.008037999999999101,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.004466\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_06",
+      "category": "2_boundary_80f_activation",
+      "description": "Boundary hi_avg = 80.0\u00b0F (Exact Rothfusz activation)",
+      "inputs": {
+        "temperature_celsius": "22.4471",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 22.25,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 22.250010555555562,
+        "rounded_celsius": 22.25,
+        "unrounded_fahrenheit": 72.050019,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 1.0555555562064e-05,
+      "absolute_difference_f": 1.900000000887303e-05,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000011\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_07",
+      "category": "2_boundary_80f_activation",
+      "description": "Boundary hi_avg = 80.1\u00b0F (Rothfusz Regression)",
+      "inputs": {
+        "temperature_celsius": "22.5",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 22.31,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 22.305555555555557,
+        "rounded_celsius": 22.31,
+        "unrounded_fahrenheit": 72.15,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": 0.0044444444444415865,
+      "absolute_difference_f": 0.007999999999995566,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.004444\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_08",
+      "category": "3_warm_humid_rothfusz",
+      "description": "Tropical warm (30\u00b0C / 60% RH)",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "60.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.83,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.83203227777776,
+        "rounded_celsius": 32.83,
+        "unrounded_fahrenheit": 91.09765809999998,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.002032277777765046,
+      "absolute_difference_f": 0.0036580999999813457,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.002032\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_09",
+      "category": "3_warm_humid_rothfusz",
+      "description": "Monsoon muggy (32\u00b0C / 70% RH)",
+      "inputs": {
+        "temperature_celsius": "32.0",
+        "relative_humidity_percent": "70.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 40.41,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 40.40927367955577,
+        "rounded_celsius": 40.41,
+        "unrounded_fahrenheit": 104.73669262320038,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.0007263204442296001,
+      "absolute_difference_f": 0.0013073767996019114,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000726\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_10",
+      "category": "3_warm_humid_rothfusz",
+      "description": "Bengaluru summer peak (35\u00b0C / 50% RH)",
+      "inputs": {
+        "temperature_celsius": "35.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 40.68,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 40.675428944444484,
+        "rounded_celsius": 40.68,
+        "unrounded_fahrenheit": 105.21577210000007,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.004571055555516068,
+      "absolute_difference_f": 0.00822789999993745,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.004571\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_11",
+      "category": "3_warm_humid_rothfusz",
+      "description": "Severe heat (38\u00b0C / 45% RH)",
+      "inputs": {
+        "temperature_celsius": "38.0",
+        "relative_humidity_percent": "45.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 45.86,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 45.85973584844454,
+        "rounded_celsius": 45.86,
+        "unrounded_fahrenheit": 114.54752452720017,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.00026415155546288815,
+      "absolute_difference_f": 0.00047547279983461976,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000264\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_12",
+      "category": "4_low_humidity_adjustment",
+      "description": "Low humidity: 30\u00b0C (86\u00b0F), 10% RH",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "10.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 27.86,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 27.86179158031804,
+        "rounded_celsius": 27.86,
+        "unrounded_fahrenheit": 82.15122484457247,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0017915803180414969,
+      "absolute_difference_f": 0.003224844572471852,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.001792\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_13",
+      "category": "4_low_humidity_adjustment",
+      "description": "Low humidity: 35\u00b0C (95\u00b0F), 8% RH (apex |T-95|=0)",
+      "inputs": {
+        "temperature_celsius": "35.0",
+        "relative_humidity_percent": "8.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 31.61,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 31.606122433333358,
+        "rounded_celsius": 31.61,
+        "unrounded_fahrenheit": 88.89102038000004,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0038775666666417408,
+      "absolute_difference_f": 0.006979619999953002,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.003878\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_14",
+      "category": "4_low_humidity_adjustment",
+      "description": "Low humidity: 40\u00b0C (104\u00b0F), 12% RH",
+      "inputs": {
+        "temperature_celsius": "40.0",
+        "relative_humidity_percent": "12.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 37.26,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 37.26316031936528,
+        "rounded_celsius": 37.26,
+        "unrounded_fahrenheit": 99.0736885748575,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0031603193652784967,
+      "absolute_difference_f": 0.005688574857501294,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.003160\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_15",
+      "category": "4_low_humidity_adjustment",
+      "description": "Low humidity: 44\u00b0C (111.2\u00b0F), 10% RH",
+      "inputs": {
+        "temperature_celsius": "44.0",
+        "relative_humidity_percent": "10.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 40.97,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 40.967412340797814,
+        "rounded_celsius": 40.97,
+        "unrounded_fahrenheit": 105.74134221343607,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0025876592021845113,
+      "absolute_difference_f": 0.004657786563939226,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.002588\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_16",
+      "category": "5_high_humidity_adjustment",
+      "description": "High humidity: 27\u00b0C (80.6\u00b0F), 90% RH",
+      "inputs": {
+        "temperature_celsius": "27.0",
+        "relative_humidity_percent": "90.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 31.09,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 31.090676964000018,
+        "rounded_celsius": 31.09,
+        "unrounded_fahrenheit": 87.96321853520003,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0006769640000179322,
+      "absolute_difference_f": 0.001218535200024462,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000677\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_17",
+      "category": "5_high_humidity_adjustment",
+      "description": "High humidity: 28\u00b0C (82.4\u00b0F), 92% RH",
+      "inputs": {
+        "temperature_celsius": "28.0",
+        "relative_humidity_percent": "92.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 34.46,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 34.46105085688899,
+        "rounded_celsius": 34.46,
+        "unrounded_fahrenheit": 94.02989154240018,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0010508568889875392,
+      "absolute_difference_f": 0.001891542400187518,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.001051\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_18",
+      "category": "5_high_humidity_adjustment",
+      "description": "High humidity: 29\u00b0C (84.2\u00b0F), 88% RH",
+      "inputs": {
+        "temperature_celsius": "29.0",
+        "relative_humidity_percent": "88.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 36.68,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 36.67649371288889,
+        "rounded_celsius": 36.68,
+        "unrounded_fahrenheit": 98.0176886832,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0035062871111080085,
+      "absolute_difference_f": 0.006311316799994415,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.003506\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_19",
+      "category": "5_high_humidity_adjustment",
+      "description": "High humidity: 30\u00b0C (86.0\u00b0F), 90% RH",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "90.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 40.77,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 40.77464699999989,
+        "rounded_celsius": 40.77,
+        "unrounded_fahrenheit": 105.3943645999998,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.004646999999884827,
+      "absolute_difference_f": 0.00836459999980832,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.004647\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_20",
+      "category": "6_adjustment_edges",
+      "description": "RH 12.9% (< 13.0%, adjustment applies)",
+      "inputs": {
+        "temperature_celsius": "35.0",
+        "relative_humidity_percent": "12.9"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.43,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.43145203322222,
+        "rounded_celsius": 32.43,
+        "unrounded_fahrenheit": 90.3766136598,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.0014520332222218713,
+      "absolute_difference_f": 0.0026136598000050526,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.001452\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_21",
+      "category": "6_adjustment_edges",
+      "description": "RH 13.0% (exact boundary, adjustment=0)",
+      "inputs": {
+        "temperature_celsius": "35.0",
+        "relative_humidity_percent": "13.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.45,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.45058465555559,
+        "rounded_celsius": 32.45,
+        "unrounded_fahrenheit": 90.41105238000006,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.0005846555555848454,
+      "absolute_difference_f": 0.0010523800000612482,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000585\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_22",
+      "category": "6_adjustment_edges",
+      "description": "RH 13.1% (> 13.0%, no adjustment)",
+      "inputs": {
+        "temperature_celsius": "35.0",
+        "relative_humidity_percent": "13.1"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.46,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.45591995544448,
+        "rounded_celsius": 32.46,
+        "unrounded_fahrenheit": 90.42065591980005,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.004080044555522022,
+      "absolute_difference_f": 0.007344080199942482,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.004080\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_23",
+      "category": "6_adjustment_edges",
+      "description": "RH 84.9% (< 85.0%, no adjustment)",
+      "inputs": {
+        "temperature_celsius": "28.0",
+        "relative_humidity_percent": "84.9"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.88,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.87988899273117,
+        "rounded_celsius": 32.88,
+        "unrounded_fahrenheit": 91.1838001869161,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.00011100726883483958,
+      "absolute_difference_f": 0.00019981308389560581,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.000111\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_24",
+      "category": "6_adjustment_edges",
+      "description": "RH 85.0% (exact boundary, adjustment=0)",
+      "inputs": {
+        "temperature_celsius": "28.0",
+        "relative_humidity_percent": "85.0"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.9,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.89636391955554,
+        "rounded_celsius": 32.9,
+        "unrounded_fahrenheit": 91.21345505519997,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": 0.0036360804444584005,
+      "absolute_difference_f": 0.006544944800026542,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.003636\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_25",
+      "category": "6_adjustment_edges",
+      "description": "RH 85.1% (> 85.0%, adjustment applies)",
+      "inputs": {
+        "temperature_celsius": "28.0",
+        "relative_humidity_percent": "85.1"
+      },
+      "project_output": {
+        "heat_index_celsius": 32.92,
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": {
+        "unrounded_celsius": 32.91797155277562,
+        "rounded_celsius": 32.92,
+        "unrounded_fahrenheit": 91.25234879499611,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": 0.002028447224383001,
+      "absolute_difference_f": 0.003651205003890823,
+      "passed": true,
+      "notes": "Parity verified: |diff| = 0.002028\u00b0C <= 0.05\u00b0C"
+    },
+    {
+      "test_id": "HI_TEST_26",
+      "category": "7_project_operational_guards",
+      "description": "19.9\u00b0C (< 20\u00b0C low-temp policy cutoff)",
+      "inputs": {
+        "temperature_celsius": "19.9",
+        "relative_humidity_percent": "60.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 19.706111111111106,
+        "rounded_celsius": 19.71,
+        "unrounded_fahrenheit": 67.47099999999999,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: Low-temperature suppression correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_27",
+      "category": "7_project_operational_guards",
+      "description": "15.0\u00b0C cool morning",
+      "inputs": {
+        "temperature_celsius": "15.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 14.430555555555555,
+        "rounded_celsius": 14.43,
+        "unrounded_fahrenheit": 57.975,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: Low-temperature suppression correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_28",
+      "category": "7_project_operational_guards",
+      "description": "10.0\u00b0C winter morning",
+      "inputs": {
+        "temperature_celsius": "10.0",
+        "relative_humidity_percent": "70.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 9.44166666666667,
+        "rounded_celsius": 9.44,
+        "unrounded_fahrenheit": 48.995000000000005,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: Low-temperature suppression correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_29",
+      "category": "7_project_operational_guards",
+      "description": "0.0\u00b0C freezing",
+      "inputs": {
+        "temperature_celsius": "0.0",
+        "relative_humidity_percent": "80.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": -0.9277777777777767,
+        "rounded_celsius": -0.93,
+        "unrounded_fahrenheit": 30.330000000000002,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: Low-temperature suppression correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_30",
+      "category": "7_project_operational_guards",
+      "description": "-10.0\u00b0C sanity lower limit",
+      "inputs": {
+        "temperature_celsius": "-10.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "NOT_APPLICABLE_LOW_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": -11.819444444444445,
+        "rounded_celsius": -11.82,
+        "unrounded_fahrenheit": 10.725000000000001,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: Low-temperature suppression correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_31",
+      "category": "7_project_operational_guards",
+      "description": "T > 110\u00b0F (111.2\u00b0F) and RH > 40% (Polynomial divergence guard)",
+      "inputs": {
+        "temperature_celsius": "44.0",
+        "relative_humidity_percent": "45.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNSUPPORTED_EXTRAPOLATION",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 64.23452364044452,
+        "rounded_celsius": 64.23,
+        "unrounded_fahrenheit": 147.62214255280014,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: High-heat divergence guard correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_32",
+      "category": "7_project_operational_guards",
+      "description": "T = 45\u00b0C (113\u00b0F) and RH = 50% (Divergence guard)",
+      "inputs": {
+        "temperature_celsius": "45.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNSUPPORTED_EXTRAPOLATION",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 73.32664984444455,
+        "rounded_celsius": 73.33,
+        "unrounded_fahrenheit": 163.9879697200002,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Project policy: High-heat divergence guard correctly triggered."
+    },
+    {
+      "test_id": "HI_TEST_33",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Negative relative humidity (-5.0%)",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "-5.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "INVALID_HUMIDITY",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 27.089606704130478,
+        "rounded_celsius": 27.09,
+        "unrounded_fahrenheit": 80.76129206743487,
+        "branch_evaluated": "ROTHFUSZ_LOW_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Invalid humidity rejected."
+    },
+    {
+      "test_id": "HI_TEST_34",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Relative humidity > 100% (105.0%)",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "105.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "INVALID_HUMIDITY",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 46.31258449999994,
+        "rounded_celsius": 46.31,
+        "unrounded_fahrenheit": 115.3626520999999,
+        "branch_evaluated": "ROTHFUSZ_HIGH_RH_ADJUSTMENT"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Invalid humidity rejected."
+    },
+    {
+      "test_id": "HI_TEST_35",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Temperature < -50\u00b0C (-55.0\u00b0C)",
+      "inputs": {
+        "temperature_celsius": "-55.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNPHYSICAL_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": -59.06944444444444,
+        "rounded_celsius": -59.07,
+        "unrounded_fahrenheit": -74.325,
+        "branch_evaluated": "STEADMAN_PRELIMINARY_AVERAGE"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Unphysical temperature rejected."
+    },
+    {
+      "test_id": "HI_TEST_36",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Temperature > 65\u00b0C (70.0\u00b0C)",
+      "inputs": {
+        "temperature_celsius": "70.0",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNPHYSICAL_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": {
+        "unrounded_celsius": 233.1127698444446,
+        "rounded_celsius": 233.11,
+        "unrounded_fahrenheit": 451.6029857200003,
+        "branch_evaluated": "ROTHFUSZ_FULL_REGRESSION"
+      },
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Unphysical temperature rejected."
+    },
+    {
+      "test_id": "HI_TEST_37",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Missing temperature (None)",
+      "inputs": {
+        "temperature_celsius": "None",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "MISSING_INPUT",
+        "is_valid": false
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Missing input rejected."
+    },
+    {
+      "test_id": "HI_TEST_38",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Missing relative humidity (None)",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "None"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "MISSING_INPUT",
+        "is_valid": false
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Missing input rejected."
+    },
+    {
+      "test_id": "HI_TEST_39",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "IEEE 754 NaN Temperature (RF-02 verification)",
+      "inputs": {
+        "temperature_celsius": "nan",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": "NaN",
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": false,
+      "notes": "CONFIRMED DEFECT RF-02: NaN input bypassed validation guards and produced NaN with status VALID!"
+    },
+    {
+      "test_id": "HI_TEST_40",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "IEEE 754 NaN Relative Humidity (RF-02 verification)",
+      "inputs": {
+        "temperature_celsius": "30.0",
+        "relative_humidity_percent": "nan"
+      },
+      "project_output": {
+        "heat_index_celsius": "NaN",
+        "status": "VALID",
+        "is_valid": true
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": false,
+      "notes": "CONFIRMED DEFECT RF-02: NaN input bypassed validation guards and produced NaN with status VALID!"
+    },
+    {
+      "test_id": "HI_TEST_41",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Positive Infinity Temperature",
+      "inputs": {
+        "temperature_celsius": "inf",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNPHYSICAL_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Infinity rejected by > 65\u00b0C comparison."
+    },
+    {
+      "test_id": "HI_TEST_42",
+      "category": "8_invalid_and_numerical_stability",
+      "description": "Negative Infinity Temperature",
+      "inputs": {
+        "temperature_celsius": "-inf",
+        "relative_humidity_percent": "50.0"
+      },
+      "project_output": {
+        "heat_index_celsius": null,
+        "status": "UNPHYSICAL_TEMPERATURE",
+        "is_valid": false
+      },
+      "reference_output": null,
+      "absolute_difference_c": null,
+      "absolute_difference_f": null,
+      "passed": true,
+      "notes": "Boundary guard: Infinity rejected by > 65\u00b0C comparison."
+    }
+  ]
+}
